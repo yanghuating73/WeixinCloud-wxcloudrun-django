@@ -8,18 +8,67 @@ from wxcloudrun.models import Counters
 logger = logging.getLogger('log')
 
 """below added by yang"""
-def chatbot_view(request):
-    if request.method == "POST":
-        user_input = request.POST.get("message", "").strip().lower()
+import hashlib
+import xml.etree.ElementTree as ET
+import time
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
 
-        if user_input == "hello":
-            return JsonResponse({"reply": "Hi there!"})
-        elif user_input == "bye":
-            return JsonResponse({"reply": "Goodbye!"})
+
+# 你之前已有的聊天逻辑
+def get_chatbot_response(msg):
+    if "你好" in msg:
+        return "你好，有什么可以帮您？"
+    return "暂时不理解您的意思～"
+
+
+# 服务号消息处理入口
+@csrf_exempt
+def chatbot_gzh_view(request):
+    if request.method == 'GET':
+        # 用于验证服务器配置（微信会发起 GET 请求进行验证）
+        signature = request.GET.get('signature', '')
+        timestamp = request.GET.get('timestamp', '')
+        nonce = request.GET.get('nonce', '')
+        echostr = request.GET.get('echostr', '')
+
+        # 获取公众号后台配置的 Token
+        # 不再在代码中配置 Token，微信会自动使用公众号后台配置的 Token 进行验证
+
+        # 将参数排序后进行 SHA1 签名并与 signature 对比
+        token = ""  # 留空，微信自动使用公众号后台的 Token
+        s = ''.join(sorted([token, timestamp, nonce]))
+        if hashlib.sha1(s.encode()).hexdigest() == signature:
+            return HttpResponse(echostr)  # 如果验证通过，返回 echostr
         else:
-            return JsonResponse({"reply": "Sorry, I didn't understand that."})
+            return HttpResponse("验证失败")  # 如果验证失败
 
-    return JsonResponse({"error": "POST request required."})
+    elif request.method == 'POST':
+        # 接收微信服务器发送的 XML 消息
+        xml_data = request.body
+        xml_tree = ET.fromstring(xml_data)
+
+        # 获取发送者、接收者和消息内容
+        from_user = xml_tree.find("FromUserName").text
+        to_user = xml_tree.find("ToUserName").text
+        content = xml_tree.find("Content").text
+
+        # 获取聊天机器人的回复
+        reply_content = get_chatbot_response(content)
+
+        # 构建回复的 XML 数据
+        reply_xml = f"""
+<xml>
+  <ToUserName><![CDATA[{from_user}]]></ToUserName>
+  <FromUserName><![CDATA[{to_user}]]></FromUserName>
+  <CreateTime>{int(time.time())}</CreateTime>
+  <MsgType><![CDATA[text]]></MsgType>
+  <Content><![CDATA[{reply_content}]]></Content>
+</xml>
+"""
+        return HttpResponse(reply_xml, content_type="text/xml")  # 返回 XML 格式的回复
+
+
 """above added by yang"""
 
 def index(request, _):

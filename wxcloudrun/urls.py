@@ -24,6 +24,6 @@ urlpatterns = (
     # 获取主页
     url(r'(/)?$', views.index),
 
-    path("chat/", views.chatbot_view), """added by yang"""
+    url(r"^chat_gzh/$", views.chatbot_gzh_view), """added by yang"""
 )
 
