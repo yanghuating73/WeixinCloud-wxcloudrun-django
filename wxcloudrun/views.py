@@ -5,25 +5,6 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from wxcloudrun.models import Counters
 
-from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
-
-@csrf_exempt  # Optional: disables CSRF check for simplicity during development
-def chatbot_view(request):
-    if request.method == "POST":
-        user_input = request.POST.get("message", "").strip().lower()
-
-        if user_input == "hello":
-            return HttpResponse("Hi there!")
-
-        # Add more custom responses here
-        elif user_input == "bye":
-            return HttpResponse("Goodbye!")
-
-        else:
-            return HttpResponse("Sorry, I didn't understand that.")
-
-    return HttpResponse("Send a POST request with 'message' in the body.")
 
 logger = logging.getLogger('log')
 

@@ -24,11 +24,3 @@ urlpatterns = (
     # 获取主页
     url(r'(/)?$', views.index),
 )
-
-"""added according to chat"""
-from django.urls import path
-from . import views
-
-urlpatterns = [
-    path("chat/", views.chatbot_view),
-]
