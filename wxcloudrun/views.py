@@ -5,9 +5,22 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from wxcloudrun.models import Counters
 
-
 logger = logging.getLogger('log')
 
+"""below added by yang"""
+def chatbot_view(request):
+    if request.method == "POST":
+        user_input = request.POST.get("message", "").strip().lower()
+
+        if user_input == "hello":
+            return JsonResponse({"reply": "Hi there!"})
+        elif user_input == "bye":
+            return JsonResponse({"reply": "Goodbye!"})
+        else:
+            return JsonResponse({"reply": "Sorry, I didn't understand that."})
+
+    return JsonResponse({"error": "POST request required."})
+"""above added by yang"""
 
 def index(request, _):
     """
