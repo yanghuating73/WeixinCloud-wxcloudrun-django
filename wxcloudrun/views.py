@@ -3,7 +3,7 @@
 
 
 def chat_gzh(request, _):
-    return
+    return JsonResponse({'code': 0, 'msg': 'ok'})  # just return a msg
 
 
 """above added by yang"""
