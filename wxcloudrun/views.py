@@ -76,7 +76,7 @@ def counter(request, _):
      `` request `` 请求对象
     """
 
-    rsp = JsonResponse({'code': 0, 'errorMsg': ''}, json_dumps_params={'ensure_ascii': False})
+#    rsp = JsonResponse({'code': 0, 'errorMsg': ''}, json_dumps_params={'ensure_ascii': False})
     if request.method == 'GET' or request.method == 'get':
         rsp = get_count()
     elif request.method == 'POST' or request.method == 'post':
