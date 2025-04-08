@@ -3,28 +3,7 @@
 
 
 def chat_gzh(request, _):
-    """
-    处理来自公众号的消息推送（JSON 格式）
-    """
-    logger.info('chat_gzh req: {}'.format(request.body))
-
-    if request.method == 'GET':
-        return JsonResponse({'code': 0, 'msg': 'ok'})  # 提供微信路径检测
-
-    user_msg = body.get('Content')
-    from_user = body.get('FromUserName')
-    to_user = body.get('ToUserName')
-
-    reply = f'您说的是：{user_msg}，我收到了～' if user_msg else '未收到消息内容'
-
-    return JsonResponse({
-        'code': 0,
-        'data': {
-            'to_user': from_user,
-            'from_user': to_user,
-            'reply': reply
-        }
-    })
+    return
 
 
 """above added by yang"""
