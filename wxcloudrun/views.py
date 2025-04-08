@@ -20,13 +20,6 @@ def chat_gzh(request, _):
     if request.method == 'GET':
         return JsonResponse({'code': 0, 'msg': 'ok'})  # 提供微信路径检测
 
-    try:
-        body = json.loads(request.body.decode('utf-8'))
-        logger.info('parsed json: {}'.format(body))
-    except Exception as e:
-        logger.error('解析请求失败: {}'.format(str(e)))
-        return JsonResponse({'code': -1, 'errorMsg': 'JSON解析失败'})
-
     user_msg = body.get('Content')
     from_user = body.get('FromUserName')
     to_user = body.get('ToUserName')
