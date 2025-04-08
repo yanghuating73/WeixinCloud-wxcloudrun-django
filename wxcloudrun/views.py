@@ -8,66 +8,47 @@ from wxcloudrun.models import Counters
 logger = logging.getLogger('log')
 
 """below added by yang"""
-import hashlib
-import xml.etree.ElementTree as ET
-import time
-from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse
 
+def chat_gzh(request, _):
+    """
+    处理来自公众号的消息推送（JSON 格式）
 
-# 你之前已有的聊天逻辑
-def get_chatbot_response(msg):
-    if "你好" in msg:
-        return "你好，有什么可以帮您？"
-    return "暂时不理解您的意思～"
+    `` request `` 请求对象
+    """
+    logger.info('chat_gzh req: {}'.format(request.body))
 
+    if request.method != 'POST':
+        return JsonResponse({'code': -1, 'errorMsg': '请求方式错误'},
+                            json_dumps_params={'ensure_ascii': False})
 
-# 服务号消息处理入口
-@csrf_exempt
-def chatbot_gzh_view(request):
-    if request.method == 'GET':
-        # 用于验证服务器配置（微信会发起 GET 请求进行验证）
-        signature = request.GET.get('signature', '')
-        timestamp = request.GET.get('timestamp', '')
-        nonce = request.GET.get('nonce', '')
-        echostr = request.GET.get('echostr', '')
+    try:
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+        logger.info('parsed json: {}'.format(body))
+    except Exception as e:
+        logger.error('解析请求失败: {}'.format(str(e)))
+        return JsonResponse({'code': -1, 'errorMsg': 'JSON解析失败'},
+                            json_dumps_params={'ensure_ascii': False})
 
-        # 获取公众号后台配置的 Token
-        # 不再在代码中配置 Token，微信会自动使用公众号后台配置的 Token 进行验证
+    # 示例：简单回显收到的消息
+    user_msg = body.get('Content', '')
+    from_user = body.get('FromUserName', '')
+    to_user = body.get('ToUserName', '')
 
-        # 将参数排序后进行 SHA1 签名并与 signature 对比
-        token = ""  # 留空，微信自动使用公众号后台的 Token
-        s = ''.join(sorted([token, timestamp, nonce]))
-        if hashlib.sha1(s.encode()).hexdigest() == signature:
-            return HttpResponse(echostr)  # 如果验证通过，返回 echostr
-        else:
-            return HttpResponse("验证失败")  # 如果验证失败
+    if not user_msg:
+        return JsonResponse({'code': 0, 'data': '未收到消息内容'},
+                            json_dumps_params={'ensure_ascii': False})
 
-    elif request.method == 'POST':
-        # 接收微信服务器发送的 XML 消息
-        xml_data = request.body
-        xml_tree = ET.fromstring(xml_data)
+    reply = f'您说的是：{user_msg}，我收到了～'
 
-        # 获取发送者、接收者和消息内容
-        from_user = xml_tree.find("FromUserName").text
-        to_user = xml_tree.find("ToUserName").text
-        content = xml_tree.find("Content").text
-
-        # 获取聊天机器人的回复
-        reply_content = get_chatbot_response(content)
-
-        # 构建回复的 XML 数据
-        reply_xml = f"""
-<xml>
-  <ToUserName><![CDATA[{from_user}]]></ToUserName>
-  <FromUserName><![CDATA[{to_user}]]></FromUserName>
-  <CreateTime>{int(time.time())}</CreateTime>
-  <MsgType><![CDATA[text]]></MsgType>
-  <Content><![CDATA[{reply_content}]]></Content>
-</xml>
-"""
-        return HttpResponse(reply_xml, content_type="text/xml")  # 返回 XML 格式的回复
-
+    return JsonResponse({
+        'code': 0,
+        'data': {
+            'to_user': from_user,
+            'from_user': to_user,
+            'reply': reply
+        }
+    }, json_dumps_params={'ensure_ascii': False})
 
 """above added by yang"""
 
