@@ -1,3 +1,13 @@
+import json
+import logging
+
+from django.http import JsonResponse
+from django.shortcuts import render
+from wxcloudrun.models import Counters
+
+
+logger = logging.getLogger('log')
+
 
 """below added by yang"""
 
