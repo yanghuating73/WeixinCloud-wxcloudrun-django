@@ -9,10 +9,29 @@ from wxcloudrun.models import Counters
 logger = logging.getLogger('log')
 
 
-"""below added by yang"""
+# below added by yang
 
 
-"""above added by yang"""
+def test(request, _):
+    """
+    获取当前计数
+
+     `` request `` 请求对象
+    """
+
+    rsp = JsonResponse({'code': 0, 'errorMsg': ''}, json_dumps_params={'ensure_ascii': False})
+    if request.method == 'GET' or request.method == 'get':
+        rsp = get_count()
+    elif request.method == 'POST' or request.method == 'post':
+        rsp = update_count(request)
+    else:
+        rsp = JsonResponse({'code': -1, 'errorMsg': '请求方式错误'},
+                           json_dumps_params={'ensure_ascii': False})
+    logger.info('response result: {}'.format(rsp.content.decode('utf-8')))
+    return rsp
+
+
+#  above added by yang
 
 
 def index(request, _):

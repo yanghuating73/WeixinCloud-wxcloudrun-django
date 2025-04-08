@@ -22,6 +22,8 @@ urlpatterns = [
     url(r'^^api/count(/)?$', views.counter),
 
     # 获取主页
-    # url(r'(/)?$', views.index),
     url(r'(/)?$', views.index),
+
+    # 测试接口
+    url(r'^^api/test(/)?$', views.test),
 ]
