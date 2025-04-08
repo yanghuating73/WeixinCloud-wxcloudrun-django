@@ -5,9 +5,10 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from wxcloudrun.models import Counters
 
-logger = logging.getLogger('log')
-
 """below added by yang"""
+
+
+logger = logging.getLogger(__name__)
 
 
 def chat_gzh(request, _):
@@ -16,32 +17,31 @@ def chat_gzh(request, _):
     """
     logger.info('chat_gzh req: {}'.format(request.body))
 
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body.decode('utf-8'))
-            logger.info('parsed json: {}'.format(data))
+    if request.method == 'GET':
+        return JsonResponse({'code': 0, 'msg': 'ok'})  # 提供微信路径检测
 
-            user_msg = data.get('Content', '')
-            from_user = data.get('FromUserName', '')
-            to_user = data.get('ToUserName', '')
+    try:
+        body = json.loads(request.body.decode('utf-8'))
+        logger.info('parsed json: {}'.format(body))
+    except Exception as e:
+        logger.error('解析请求失败: {}'.format(str(e)))
+        return JsonResponse({'code': -1, 'errorMsg': 'JSON解析失败'})
 
-            reply = f'您说的是：{user_msg}，我收到了～'
+    user_msg = body.get('Content')
+    from_user = body.get('FromUserName')
+    to_user = body.get('ToUserName')
 
-            return JsonResponse({
-                'data': {
-                    'to_user': from_user,
-                    'from_user': to_user,
-                    'reply': reply
-                }
-            }, json_dumps_params={'ensure_ascii': False})
+    reply = f'您说的是：{user_msg}，我收到了～' if user_msg else '未收到消息内容'
 
-        except Exception as e:
-            logger.error('JSON解析失败: {}'.format(str(e)))
-            return JsonResponse({'data': '消息解析失败'},
-                                json_dumps_params={'ensure_ascii': False})
+    return JsonResponse({
+        'code': 0,
+        'data': {
+            'to_user': from_user,
+            'from_user': to_user,
+            'reply': reply
+        }
+    })
 
-    return JsonResponse({'data': '请使用POST方式发送消息'},
-                        json_dumps_params={'ensure_ascii': False})
 
 """above added by yang"""
 
