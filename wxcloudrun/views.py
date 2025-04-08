@@ -16,7 +16,7 @@ def chat_gzh(request, _):
 
     `` request `` 请求对象
     """
-    """
+
     logger.info('chat_gzh req: {}'.format(request.body))
 
     if request.method != 'POST':
@@ -51,11 +51,6 @@ def chat_gzh(request, _):
             'reply': reply
         }
     }, json_dumps_params={'ensure_ascii': False})
-    """
-    import logging
-    logger = logging.getLogger(__name__)
-    logger.info("chat_gzh called")
-    return JsonResponse({'code': 0, 'message': 'chat_gzh works!'})
 
 
 """above added by yang"""
