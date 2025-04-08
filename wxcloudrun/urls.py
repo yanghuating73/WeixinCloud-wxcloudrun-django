@@ -25,5 +25,4 @@ urlpatterns = [
     # 获取主页
     # url(r'(/)?$', views.index),
     url(r'^$', views.index),  # Clean and precise match for the root URL#
-    url(r'^chat_gzh(/)?$', views.chat_gzh),  # added by yang
 ]

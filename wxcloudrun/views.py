@@ -2,10 +2,6 @@
 """below added by yang"""
 
 
-def chat_gzh(request, _):
-    return JsonResponse({'code': 0, 'msg': 'ok'})  # just return a msg
-
-
 """above added by yang"""
 
 
