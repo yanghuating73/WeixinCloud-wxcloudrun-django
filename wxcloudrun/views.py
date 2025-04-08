@@ -1,5 +1,6 @@
 import json
 import logging
+import time
 
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -42,13 +43,17 @@ def test(request, _):
 
         # 5. 构建回复格式
         rsp = {
-            'code': 0,
-            'data': {
-                'to_user': from_user,
-                'from_user': to_user,
-                'reply': reply
+            # 'code': 0,
+            # 'data': {
+                # 'to_user': from_user,
+                # 'from_user': to_user,
+                # 'reply': reply
+            "ToUserName":from_user,
+            "FromUserName":to_user,
+            "CreateTime":int(time.time()),
+            "MsgType":"text",
+            "Content":reply,
             }
-        }
     else:
         rsp = JsonResponse({'code': -1, 'errorMsg': '请求方式错误'},
                            json_dumps_params={'ensure_ascii': False})
