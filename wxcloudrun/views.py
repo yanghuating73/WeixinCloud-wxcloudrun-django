@@ -13,45 +13,35 @@ logger = logging.getLogger('log')
 def chat_gzh(request, _):
     """
     处理来自公众号的消息推送（JSON 格式）
-
-    `` request `` 请求对象
     """
-
     logger.info('chat_gzh req: {}'.format(request.body))
 
-    if request.method != 'POST':
-        return JsonResponse({'code': -1, 'errorMsg': '请求方式错误'},
-                            json_dumps_params={'ensure_ascii': False})
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            logger.info('parsed json: {}'.format(data))
 
-    try:
-        body_unicode = request.body.decode('utf-8')
-        body = json.loads(body_unicode)
-        logger.info('parsed json: {}'.format(body))
-    except Exception as e:
-        logger.error('解析请求失败: {}'.format(str(e)))
-        return JsonResponse({'code': -1, 'errorMsg': 'JSON解析失败'},
-                            json_dumps_params={'ensure_ascii': False})
+            user_msg = data.get('Content', '')
+            from_user = data.get('FromUserName', '')
+            to_user = data.get('ToUserName', '')
 
-    # 示例：简单回显收到的消息
-    user_msg = body.get('Content', '')
-    from_user = body.get('FromUserName', '')
-    to_user = body.get('ToUserName', '')
+            reply = f'您说的是：{user_msg}，我收到了～'
 
-    if not user_msg:
-        return JsonResponse({'code': 0, 'data': '未收到消息内容'},
-                            json_dumps_params={'ensure_ascii': False})
+            return JsonResponse({
+                'data': {
+                    'to_user': from_user,
+                    'from_user': to_user,
+                    'reply': reply
+                }
+            }, json_dumps_params={'ensure_ascii': False})
 
-    reply = f'您说的是：{user_msg}，我收到了～'
+        except Exception as e:
+            logger.error('JSON解析失败: {}'.format(str(e)))
+            return JsonResponse({'data': '消息解析失败'},
+                                json_dumps_params={'ensure_ascii': False})
 
-    return JsonResponse({
-        'code': 0,
-        'data': {
-            'to_user': from_user,
-            'from_user': to_user,
-            'reply': reply
-        }
-    }, json_dumps_params={'ensure_ascii': False})
-
+    return JsonResponse({'data': '请使用POST方式发送消息'},
+                        json_dumps_params={'ensure_ascii': False})
 
 """above added by yang"""
 
