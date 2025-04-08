@@ -1,14 +1,5 @@
-import json
-import logging
-
-from django.http import JsonResponse
-from django.shortcuts import render
-from wxcloudrun.models import Counters
 
 """below added by yang"""
-
-
-logger = logging.getLogger(__name__)
 
 
 def chat_gzh(request, _):
