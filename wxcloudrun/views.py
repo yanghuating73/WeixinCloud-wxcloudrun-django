@@ -13,17 +13,11 @@ logger = logging.getLogger('log')
 
 
 def test(request, _):
-    """
-    获取当前计数
 
-     `` request `` 请求对象
-    """
-
-    rsp = JsonResponse({'code': 0, 'errorMsg': ''}, json_dumps_params={'ensure_ascii': False})
     if request.method == 'GET' or request.method == 'get':
-        rsp = get_count()
+        rsp = JsonResponse({'code': 0, 'msg': 'ok'}, json_dumps_params={'ensure_ascii': False})
     elif request.method == 'POST' or request.method == 'post':
-        rsp = update_count(request)
+        rsp = JsonResponse({'code': 0, 'msg': 'ok'}, json_dumps_params={'ensure_ascii': False})
     else:
         rsp = JsonResponse({'code': -1, 'errorMsg': '请求方式错误'},
                            json_dumps_params={'ensure_ascii': False})
