@@ -16,14 +16,18 @@ Including another URLconf
 
 from wxcloudrun import views
 from django.conf.urls import url
+from . import views
+from django.conf.urls import url  # for regex-based routes
+from django.urls import path      # for simple path-based routes
 
 urlpatterns = [
     # 计数器接口
     url(r'^api/count(/)?$', views.counter),
 
     # 获取主页
-    url(r'(/)?$', views.index),
+    # url(r'(/)?$', views.index),
+    url(r'^$', views.index),  # Clean and precise match for the root URL
 
-    path("chat_gzh/", views.chat_gzh), """added by yang"""
+    path("chat_gzh/", views.chat_gzh), # added by yang
 ]
 
