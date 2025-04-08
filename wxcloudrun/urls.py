@@ -19,11 +19,11 @@ from django.conf.urls import url
 
 urlpatterns = [
     # 计数器接口
-    url(r'^api/count(/)?$', views.test),
+    url(r'^api/count(/)?$', views.counter),
 
     # 获取主页
     url(r'(/)?$', views.index),
 
     # 测试接口
-    url(r'^api/test(/)?$', views.counter),
+    url(r'^api/test(/)?$', views.test),
 ]

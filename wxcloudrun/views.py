@@ -17,7 +17,38 @@ def test(request, _):
     if request.method == 'GET' or request.method == 'get':
         rsp = JsonResponse({'code': 0, 'msg': 'ok'}, json_dumps_params={'ensure_ascii': False})
     elif request.method == 'POST' or request.method == 'post':
-        rsp = JsonResponse({'code': 0, 'msg': 'ok'}, json_dumps_params={'ensure_ascii': False})
+        try:
+            # 2. 获取请求内容
+            body_unicode = request.body.decode('utf-8')
+            body = json.loads(body_unicode)  # 转换为JSON格式
+            logger.info('解析后的消息内容：{}'.format(body))
+        except Exception as e:
+            logger.error('解析请求失败: {}'.format(str(e)))
+            return JsonResponse({'code': -1, 'errorMsg': 'JSON解析失败'}, json_dumps_params={'ensure_ascii': False})
+
+        # 3. 从请求中获取消息内容
+        user_msg = body.get('Content', '')  # 用户输入的消息
+        from_user = body.get('FromUserName', '')  # 用户的公众号ID
+        to_user = body.get('ToUserName', '')  # 公众号ID
+
+        if not user_msg:
+            return JsonResponse({'code': 0, 'data': '未收到消息内容'}, json_dumps_params={'ensure_ascii': False})
+
+        # 4. 简单分析消息内容并构建自动回复
+        if '你好' in user_msg:
+            reply = "你好！欢迎与我对话～"
+        else:
+            reply = f"您说的是：{user_msg}，我收到啦～"
+
+        # 5. 构建回复格式
+        rsp = {
+            'code': 0,
+            'data': {
+                'to_user': from_user,
+                'from_user': to_user,
+                'reply': reply
+            }
+        }
     else:
         rsp = JsonResponse({'code': -1, 'errorMsg': '请求方式错误'},
                            json_dumps_params={'ensure_ascii': False})
