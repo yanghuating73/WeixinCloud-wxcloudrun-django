@@ -17,7 +17,7 @@ Including another URLconf
 from wxcloudrun import views
 from django.conf.urls import url
 
-urlpatterns = [
+urlpatterns = (
     # 计数器接口
     url(r'^api/count(/)?$', views.counter),
 
@@ -29,4 +29,4 @@ urlpatterns = [
 
     # 测试接口acc. to deepseek
     url(r'^api/test(/)?$', views.test),
-]
+)
