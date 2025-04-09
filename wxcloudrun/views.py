@@ -20,9 +20,8 @@ from django.utils.decorators import method_decorator
 class WeChatCallbackView(View):
     """微信服务号JSON消息回调处理"""
     def get(self, request):
-        echostr = request.GET.get('echostr', '')
-        return HttpResponse(echostr)
-
+        rsp = JsonResponse({'code': 0, 'msg': 'ok'}, json_dumps_params={'ensure_ascii': False})
+        return rsp
     def post(self, request):
         """处理用户消息"""
         try:
