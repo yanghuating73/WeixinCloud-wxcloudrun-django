@@ -18,12 +18,12 @@ from django.utils.decorators import method_decorator
 
 @method_decorator(csrf_exempt, name='dispatch')
 class WeChatCallbackView(View):
-    """微信服务号JSON消息回调处理"""
+
     def get(request, _):
         rsp = JsonResponse({'code': 0, 'msg': 'ok'}, json_dumps_params={'ensure_ascii': False})
         return rsp
     def post(request, _):
-        """处理用户消息"""
+
         try:
             # 解析JSON消息体
             msg_data = json.loads(request.body.decode('utf-8'))
@@ -44,7 +44,7 @@ class WeChatCallbackView(View):
             )
 
     def _build_response(self, msg_data):
-        """构造响应消息"""
+
         base_data = {
             'ToUserName': msg_data.get('FromUserName'),
             'FromUserName': msg_data.get('ToUserName'),
@@ -65,7 +65,7 @@ class WeChatCallbackView(View):
         return base_data
 
     def _handle_event(self, msg_data):
-        """处理事件推送"""
+
         event = msg_data.get('Event')
         if event == 'subscribe':
             return "感谢关注！"
@@ -86,13 +86,6 @@ def test(request, _):
     if request.method == 'GET' or request.method == 'get':
         rsp = JsonResponse({'code': 0, 'msg': 'ok'}, json_dumps_params={'ensure_ascii': False})
     elif request.method == 'POST' or request.method == 'post':
-        try:  # code from update_count
-            data = Counters.objects.get(id=1)
-        except Counters.DoesNotExist:
-            data = Counters()
-        data.id = 1
-        data.count += 1
-        data.save()  # code from update_count
         try:
             # 2. 获取请求内容
             body_unicode = request.body.decode('utf-8')
@@ -118,17 +111,12 @@ def test(request, _):
 
         # 5. 构建回复格式
         rsp = JsonResponse({
-            # 'code': 0,
-            # 'data': {
-                # 'to_user': from_user,
-                # 'from_user': to_user,
-                # 'reply': reply
-            "ToUserName":from_user,
-            "FromUserName":to_user,
-            "CreateTime":int(time.time()),
-            "MsgType":"text",
-            "Content":reply,
-            }, json_dumps_params={'ensure_ascii': False})
+            "ToUserName": from_user,
+            "FromUserName": to_user,
+            "CreateTime": int(time.time()),
+            "MsgType": "text",
+            "Content": reply,
+        }, json_dumps_params={'ensure_ascii': False})
     else:
         rsp = JsonResponse({'code': -1, 'errorMsg': '请求方式错误'},
                            json_dumps_params={'ensure_ascii': False})
