@@ -11,8 +11,6 @@ logger = logging.getLogger('log')
 
 # below added by yang
 def test(request):
-    print("test接口被调用了")
-    logger.warning("=== test 接口已进入 ===")
     if request.method == 'GET' or request.method == 'get':
         rsp = JsonResponse({'code': 0, 'msg': 'ok'}, json_dumps_params={'ensure_ascii': False})
     elif request.method == 'POST' or request.method == 'post':
