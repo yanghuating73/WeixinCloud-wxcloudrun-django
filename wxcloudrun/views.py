@@ -57,22 +57,13 @@ def test(request):
 #  above added by yang
 
 
+"""
 def index(request, _):
-    """
-    获取主页
-
-     `` request `` 请求对象
-    """
 
     return render(request, 'index.html')
 
 
 def counter(request, _):
-    """
-    获取当前计数
-
-     `` request `` 请求对象
-    """
 
 #    rsp = JsonResponse({'code': 0, 'errorMsg': ''}, json_dumps_params={'ensure_ascii': False})
     if request.method == 'GET' or request.method == 'get':
@@ -87,9 +78,6 @@ def counter(request, _):
 
 
 def get_count():
-    """
-    获取当前计数
-    """
 
     try:
         data = Counters.objects.get(id=1)
@@ -101,11 +89,6 @@ def get_count():
 
 
 def update_count(request):
-    """
-    更新计数，自增或者清零
-
-    `` request `` 请求对象
-    """
 
     logger.info('update_count req: {}'.format(request.body))
 
@@ -137,3 +120,4 @@ def update_count(request):
     else:
         return JsonResponse({'code': -1, 'errorMsg': 'action参数错误'},
                             json_dumps_params={'ensure_ascii': False})
+"""
