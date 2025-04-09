@@ -10,7 +10,7 @@ logger = logging.getLogger('log')
 
 
 # below added by yang
-def test(request, _):
+def test(request):
     print("test接口被调用了")
     logger.warning("=== test 接口已进入 ===")
     if request.method == 'GET' or request.method == 'get':
