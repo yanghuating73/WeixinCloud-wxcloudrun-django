@@ -19,10 +19,10 @@ from django.utils.decorators import method_decorator
 @method_decorator(csrf_exempt, name='dispatch')
 class WeChatCallbackView(View):
     """微信服务号JSON消息回调处理"""
-    def get(self, request):
+    def get(request, _):
         rsp = JsonResponse({'code': 0, 'msg': 'ok'}, json_dumps_params={'ensure_ascii': False})
         return rsp
-    def post(self, request):
+    def post(request, _):
         """处理用户消息"""
         try:
             # 解析JSON消息体
