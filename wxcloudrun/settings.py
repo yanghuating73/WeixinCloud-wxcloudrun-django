@@ -3,7 +3,7 @@ from pathlib import Path
 import time
 
 CUR_PATH = os.path.dirname(os.path.realpath(__file__))  
-LOG_PATH = os.path.join(os.path.dirname(CUR_PATH), 'logs') # LOG_PATH是存放日志的路径
+LOG_PATH = os.path.join(os.path.dirname(CUR_PATH), 'logs')  # LOG_PATH是存放日志的路径
 if not os.path.exists(LOG_PATH): os.mkdir(LOG_PATH)  # 如果不存在这个logs文件夹，就自动创建一个
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -65,6 +65,7 @@ WSGI_APPLICATION = 'wxcloudrun.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+""" yang
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -76,6 +77,8 @@ DATABASES = {
         'OPTIONS': {'charset': 'utf8mb4'},
     }
 }
+"""
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

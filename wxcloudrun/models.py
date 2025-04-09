@@ -1,8 +1,8 @@
-from datetime import datetime
+# from datetime import datetime
 
-from django.db import models
+# yang from django.db import models
 
-
+""" yang
 # Create your models here.
 class Counters(models.Model):
     id = models.AutoField
@@ -15,3 +15,4 @@ class Counters(models.Model):
 
     class Meta:
         db_table = 'Counters'  # 数据库表名
+"""
