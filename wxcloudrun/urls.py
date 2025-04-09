@@ -18,15 +18,16 @@ from wxcloudrun import views
 from django.conf.urls import url
 
 urlpatterns = (
+    # 测试接口acc. to deepseek
+    url(r'^api/test/?$', views.test),
+
     # 计数器接口
-    url(r'^api/count(/)?$', views.counter),
+    # url(r'^api/count(/)?$', views.counter),
 
     # 获取主页
-    url(r'(/)?$', views.index),
+    # url(r'(/)?$', views.index),
 
     # 测试接口
     # url(r'^api/test(/)?$', views.test),
 
-    # 测试接口acc. to deepseek
-    url(r'^api/test/?$', views.test),
 )
