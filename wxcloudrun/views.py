@@ -18,6 +18,13 @@ def test(request, _):
     if request.method == 'GET' or request.method == 'get':
         rsp = JsonResponse({'code': 0, 'msg': 'ok'}, json_dumps_params={'ensure_ascii': False})
     elif request.method == 'POST' or request.method == 'post':
+        try:  # code from update_count
+            data = Counters.objects.get(id=1)
+        except Counters.DoesNotExist:
+            data = Counters()
+        data.id = 1
+        data.count += 1
+        data.save()  # code from update_count
         try:
             # 2. 获取请求内容
             body_unicode = request.body.decode('utf-8')
