@@ -28,5 +28,5 @@ urlpatterns = [
     # url(r'^api/test(/)?$', views.test),
 
     # 测试接口acc. to deepseek
-    url(r'^api/test(/)?$', WeChatCallbackView.as_view()),
+    url(r'^api/test(/)?$', views.test),
 ]
