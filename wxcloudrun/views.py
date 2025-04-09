@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from wxcloudrun.models import Counters
 
+"""
 # added acc. to deepseek
 import hashlib
 import json
@@ -14,7 +15,6 @@ from django.http import HttpResponse, JsonResponse
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-
 
 @method_decorator(csrf_exempt, name='dispatch')
 class WeChatCallbackView(View):
@@ -75,14 +75,12 @@ class WeChatCallbackView(View):
             return f"收到{event}事件"
 
 # added acc. to deepseek
-
+"""
 
 logger = logging.getLogger('log')
 
 
 # below added by yang
-
-"""
 def test(request, _):
 
     if request.method == 'GET' or request.method == 'get':
@@ -119,7 +117,7 @@ def test(request, _):
             reply = f"您说的是：{user_msg}，我收到啦～"
 
         # 5. 构建回复格式
-        rsp = {
+        rsp = JsonResponse({
             # 'code': 0,
             # 'data': {
                 # 'to_user': from_user,
@@ -130,7 +128,7 @@ def test(request, _):
             "CreateTime":int(time.time()),
             "MsgType":"text",
             "Content":reply,
-            }
+            }, json_dumps_params={'ensure_ascii': False})
     else:
         rsp = JsonResponse({'code': -1, 'errorMsg': '请求方式错误'},
                            json_dumps_params={'ensure_ascii': False})
@@ -139,7 +137,6 @@ def test(request, _):
 
 
 #  above added by yang
-"""
 
 
 def index(request, _):
