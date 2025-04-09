@@ -16,6 +16,7 @@ Including another URLconf
 
 from wxcloudrun import views
 from django.conf.urls import url
+from django.urls import path # added acc. to deepseek
 
 urlpatterns = [
     # 计数器接口
@@ -25,5 +26,8 @@ urlpatterns = [
     url(r'(/)?$', views.index),
 
     # 测试接口
-    url(r'^api/test(/)?$', views.test),
+    # url(r'^api/test(/)?$', views.test),
+
+    # 测试接口acc. to deepseek
+    path('api/test/', WeChatCallbackView.as_view(), name='wechat-callback'),
 ]

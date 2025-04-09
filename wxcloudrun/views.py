@@ -6,13 +6,84 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from wxcloudrun.models import Counters
 
+# added acc. to deepseek
+import hashlib
+import json
+import time
+from django.http import HttpResponse, JsonResponse
+from django.views import View
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class WeChatCallbackView(View):
+    """微信服务号JSON消息回调处理"""
+    def get(self, request):
+        echostr = request.GET.get('echostr', '')
+        return HttpResponse(echostr)
+
+    def post(self, request):
+        """处理用户消息"""
+        try:
+            # 解析JSON消息体
+            msg_data = json.loads(request.body.decode('utf-8'))
+
+            # 构造自动回复
+            response_data = self._build_response(msg_data)
+            return JsonResponse(response_data)
+
+        except json.JSONDecodeError:
+            return JsonResponse(
+                {'error': 'Invalid JSON format'},
+                status=400
+            )
+        except Exception as e:
+            return JsonResponse(
+                {'error': str(e)},
+                status=500
+            )
+
+    def _build_response(self, msg_data):
+        """构造响应消息"""
+        base_data = {
+            'ToUserName': msg_data.get('FromUserName'),
+            'FromUserName': msg_data.get('ToUserName'),
+            'CreateTime': int(time.time()),
+            'MsgType': 'text'
+        }
+
+        # 根据消息类型处理
+        msg_type = msg_data.get('MsgType')
+
+        if msg_type == 'text':
+            base_data['Content'] = f"收到文本消息: {msg_data.get('Content')}"
+        elif msg_type == 'event':
+            base_data['Content'] = self._handle_event(msg_data)
+        else:
+            base_data['Content'] = "暂不支持此消息类型"
+
+        return base_data
+
+    def _handle_event(self, msg_data):
+        """处理事件推送"""
+        event = msg_data.get('Event')
+        if event == 'subscribe':
+            return "感谢关注！"
+        elif event == 'unsubscribe':
+            return ""  # 用户取消关注不回复
+        else:
+            return f"收到{event}事件"
+
+# added acc. to deepseek
+
 
 logger = logging.getLogger('log')
 
 
 # below added by yang
 
-
+"""
 def test(request, _):
 
     if request.method == 'GET' or request.method == 'get':
@@ -69,6 +140,7 @@ def test(request, _):
 
 
 #  above added by yang
+"""
 
 
 def index(request, _):
