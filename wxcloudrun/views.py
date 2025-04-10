@@ -3,7 +3,7 @@ import logging
 import time
 from django.http import JsonResponse
 from django.shortcuts import render
-
+import requests
 import os
 
 logger = logging.getLogger('log')
