@@ -4,6 +4,7 @@ import time
 from django.http import JsonResponse
 from django.shortcuts import render
 
+logger = logging.getLogger('log')
 
 def test(request):
     if request.method == 'GET' or request.method == 'get':
