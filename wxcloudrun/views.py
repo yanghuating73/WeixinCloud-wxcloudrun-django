@@ -12,6 +12,8 @@ logger = logging.getLogger('log')
 EXCEL_PATH = '/data/rules.xlsx'
 
 def load_table(path):
+    if not os.path.exists(path):
+        return {}, [], [], "默认回复内容", "文件不存在"
     wb = openpyxl.load_workbook(path)
     sheet1 = wb.worksheets[0]
     sheet2 = wb.worksheets[1]
@@ -34,7 +36,7 @@ def load_table(path):
     return data, list(data.keys()), headers, default_message, warning_message
 
 # load the table to memory
-# table, jurisdictions, info_types, default_message, warning_message = load_table(EXCEL_PATH)
+table, jurisdictions, info_types, default_message, warning_message = load_table(EXCEL_PATH)
 
 
 def fuzzy_match(text, options):
