@@ -5,8 +5,6 @@ from django.http import JsonResponse
 from django.shortcuts import render
 import os
 import openpyxl
-from django.views.decorators.csrf import csrf_exempt
-
 
 logger = logging.getLogger('log')
 # Load the Excel table once and keep it in memory (optional optimization)
@@ -46,7 +44,7 @@ def fuzzy_match(text, options):
     return None
 
 
-@csrf_exempt
+
 def test(request):
     if request.method != 'POST' and request.method != 'post':
         return JsonResponse({'code': 0, 'msg': 'ok'}, json_dumps_params={'ensure_ascii': False})
