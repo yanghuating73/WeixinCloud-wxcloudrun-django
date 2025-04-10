@@ -4,12 +4,12 @@ import time
 from django.http import JsonResponse
 from django.shortcuts import render
 
-import os
-import openpyxl
+# import os
+# import openpyxl
 
 logger = logging.getLogger('log')
 # Load the Excel table once and keep it in memory (optional optimization)
-# EXCEL_PATH = '/data/rules.xlsx'
+EXCEL_PATH = '/data/rules.xlsx'
 
 
 
