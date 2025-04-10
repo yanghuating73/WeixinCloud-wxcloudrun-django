@@ -10,6 +10,16 @@ logger = logging.getLogger('log')
 # Load the Excel table once and keep it in memory (optional optimization)
 
 
+def download_excel_file(temp_url, save_path="/tmp/rules.xlsx"):
+    response = requests.get(temp_url)
+    if response.status_code == 200:
+        with open(save_path, "wb") as f:
+            f.write(response.content)
+        return save_path
+    else:
+        raise Exception(f"Failed to download file: {response.status_code}")
+
+
 def load_table(path):
     if not os.path.exists(path):
         return {}, [], [], "文件不存在", "文件不存在"
@@ -43,9 +53,16 @@ def fuzzy_match(text, options):
 
 
 def test(request):
+    # load the file to local path
+    file_url = (
+        "https://7072-prod-1g3d62ey10e2634f-1353111496.tcb.qcloud.la/rules.xlsx"
+        "?sign=24f5bca4e479c062b45ff090b09a2075&t=1744279956"
+    )
+    local_path = download_excel_file(file_url)
+
     # load the table to memory
-    EXCEL_PATH = '/data/rules.xlsx'
-    table, jurisdictions, info_types, default_message, warning_message = load_table(EXCEL_PATH)
+    table, jurisdictions, info_types, default_message, warning_message = load_table(local_path)
+
     if request.method == 'GET' or request.method == 'get':
         return JsonResponse({'code': 0, 'msg': 'ok'}, json_dumps_params={'ensure_ascii': False})
     try:
