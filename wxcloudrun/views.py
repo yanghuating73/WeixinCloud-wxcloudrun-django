@@ -12,33 +12,10 @@ logger = logging.getLogger('log')
 EXCEL_PATH = '/data/rules.xlsx'
 
 
-def load_table(path):
-    if not os.path.exists(path):
-        return {}, [], [], "默认回复内容", "文件不存在或者路径错误"
 
-    wb = openpyxl.load_workbook(path)
-    sheet1 = wb.worksheets[0]
-    sheet2 = wb.worksheets[1]
-
-    # Load default fallback message from Sheet 2, cell A1
-    default_message = sheet2.cell(row=1, column=1).value or "No default message set."
-    warning_message = sheet2.cell(row=2, column=1).value or "No warning message set."
-
-    data = {}
-    headers = [cell.value for cell in sheet1[1]][1:]  # First row, skip first cell
-
-    for row in sheet1.iter_rows(min_row=2):
-        jurisdiction = row[0].value
-        if not jurisdiction:
-            continue
-        data[jurisdiction] = {}
-        for i, cell in enumerate(row[1:]):
-            data[jurisdiction][headers[i]] = cell.value if cell.value else 'No data available.'
-
-    return data, list(data.keys()), headers, default_message, warning_message
 
 # load the table to memory
-table, jurisdictions, info_types, default_message, warning_message = load_table(EXCEL_PATH)
+# table, jurisdictions, info_types, default_message, warning_message = load_table(EXCEL_PATH)
 
 
 def fuzzy_match(text, options):
