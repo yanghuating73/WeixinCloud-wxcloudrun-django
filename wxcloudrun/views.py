@@ -65,11 +65,11 @@ def test(request):
     if not user_msg:
         reply = default_message
     else:
-        matched_jurisdiction = fuzzy_match(usr_msg, jurisdictions)
+        matched_jurisdiction = fuzzy_match(user_msg, jurisdictions)
         if not matched_jurisdiction:
             reply = default_message
         else:
-            matched_info = fuzzy_match(usr_msg, info_types)
+            matched_info = fuzzy_match(user_msg, info_types)
             if not matched_info:
                 reply = default_message
             else:
