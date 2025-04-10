@@ -37,7 +37,7 @@ def test(request):
         logger.error('解析请求失败: {}'.format(str(e)))
         return JsonResponse({'code': -1, 'errorMsg': 'JSON解析失败'}, json_dumps_params={'ensure_ascii': False})
 
-    default_message = "testing"
+    default_message = "testing3"
     reply = default_message
     # 3. 从请求中获取消息内容
     user_msg = body.get('Content', '')  # 用户输入的消息
