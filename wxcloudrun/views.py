@@ -6,7 +6,7 @@ from django.shortcuts import render
 
 
 def test(request):
-    if request.method != 'POST' and request.method != 'post':
+    if request.method == 'GET' or request.method == 'get':
         return JsonResponse({'code': 0, 'msg': 'ok'}, json_dumps_params={'ensure_ascii': False})
     try:
         # 2. 获取请求内容
