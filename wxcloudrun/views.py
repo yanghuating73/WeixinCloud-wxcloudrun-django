@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 import requests
 import os
+import openpyxl
 
 logger = logging.getLogger('log')
 # Load the Excel table once and keep it in memory (optional optimization)
