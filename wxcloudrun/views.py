@@ -57,7 +57,7 @@ def test(request):
     # load the file to local path
     file_url = (
         "https://7072-prod-1g3d62ey10e2634f-1353111496.tcb.qcloud.la/rules.xlsx"
-        "?sign=24f5bca4e479c062b45ff090b09a2075&t=1744279956"
+        "?sign=f54f856262317852be9ab7ac483d3097 & t=1744340239"
     )
     local_path = download_excel_file(file_url)
 
