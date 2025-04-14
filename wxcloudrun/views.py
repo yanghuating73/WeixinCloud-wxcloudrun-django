@@ -33,18 +33,25 @@ def load_table(path):
     warning_message = sheet2.cell(row=2, column=1).value or "No warning message set."
 
     data = {}
-    headers = [cell.value for cell in sheet1[1]][1:]  # First row, skip first cell
+    headers = [cell.value for cell in sheet1[2]][1:]  # First row, skip first cell
 
+    # for row in sheet1.iter_rows(min_row=2):
+    #    jurisdiction = row[0].value
+    #    if not jurisdiction:
+    #        continue
+    #    data[jurisdiction] = {}
+    #    for i, cell in enumerate(row[1:]):
+    #        data[jurisdiction][headers[i]] = cell.value if cell.value else 'No data available.'
     for row in sheet1.iter_rows(min_row=2):
-        jurisdiction = row[0].value
+        jurisdiction = row[0].value  # Column A
         if not jurisdiction:
             continue
         data[jurisdiction] = {}
-        for i, cell in enumerate(row[1:]):
-            data[jurisdiction][headers[i]] = cell.value if cell.value else 'No data available.'
-
+        for i in range(1, 4):  # Columns B (1) to D (3)
+            header = headers[i - 1]  # headers aligned with B-D
+            cell = row[i]
+            data[jurisdiction][header] = cell.value if cell.value else 'No data available.'
     return data, list(data.keys()), headers, default_message, warning_message
-
 
 def fuzzy_match(text, options):
     for option in options:
@@ -57,13 +64,14 @@ def test(request):
     # load the file to local path
     file_url = (
         "https://7072-prod-1g3d62ey10e2634f-1353111496.tcb.qcloud.la/rules.xlsx"
-        "?sign=f54f856262317852be9ab7ac483d3097 & t=1744340239"
+        "?sign=57ca773158ef85b464426c2754bd5c91&t=1744600981"
     )
     local_path = download_excel_file(file_url)
 
-    # load the table to memory
+    # 1. load the table to memory
     table, jurisdictions, info_types, default_message, warning_message = load_table(local_path)
 
+    #  用于微信系统健康检查，在系统向服务发送GET时返回ok
     if request.method == 'GET' or request.method == 'get':
         return JsonResponse({'code': 0, 'msg': 'ok'}, json_dumps_params={'ensure_ascii': False})
     try:
@@ -82,6 +90,8 @@ def test(request):
 
     if not user_msg:
         reply = default_message
+    elif "留言" in user_msg:
+        reply = "我们已收到您的留言，我们会尽快回复~"
     else:
         matched_jurisdiction = fuzzy_match(user_msg, jurisdictions)
         if not matched_jurisdiction:
@@ -92,7 +102,7 @@ def test(request):
                 reply = default_message
             else:
                 result = table[matched_jurisdiction][matched_info]
-                reply = warning_message + "\n" + matched_info + ":\n" + result
+                reply = warning_message + "\n" + matched_jurisdiction_matched_info + ":\n" + result
 
     # 5. 构建回复格式
     rsp = JsonResponse({
