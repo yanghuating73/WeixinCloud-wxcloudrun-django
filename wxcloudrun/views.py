@@ -34,6 +34,7 @@ def load_table(path):
 
     data = {}
     headers = [cell.value for cell in sheet1[2]][1:]  # First row, skip first cell
+    count = len(headers)  # count of info-types, including 3 jurisdiction columns
 
     # for row in sheet1.iter_rows(min_row=2):
     #    jurisdiction = row[0].value
@@ -43,12 +44,28 @@ def load_table(path):
     #    for i, cell in enumerate(row[1:]):
     #        data[jurisdiction][headers[i]] = cell.value if cell.value else 'No data available.'
     for row in sheet1.iter_rows(min_row=2):
-        jurisdiction = row[0].value  # Column A
+        jurisdiction = row[1].value  # Column B
         if not jurisdiction:
             continue
         data[jurisdiction] = {}
-        for i in range(1, 4):  # Columns B (1) to D (3)
-            header = headers[i - 1]  # headers aligned with B-D
+        for i in range(4, count):  # Columns E (4) to end
+            header = headers[i - 4]  # headers aligned with E to end
+            cell = row[i]
+            data[jurisdiction][header] = cell.value if cell.value else 'No data available.'
+        jurisdiction = row[2].value  # Column C
+        if not jurisdiction:
+            continue
+        data[jurisdiction] = {}
+        for i in range(4, count):  # Columns E (4) to end
+            header = headers[i - 4]  # headers aligned with E to end
+            cell = row[i]
+            data[jurisdiction][header] = cell.value if cell.value else 'No data available.'
+        jurisdiction = row[3].value  # Column D
+        if not jurisdiction:
+            continue
+        data[jurisdiction] = {}
+        for i in range(4, count):  # Columns E (4) to end
+            header = headers[i - 4]  # headers aligned with E to end
             cell = row[i]
             data[jurisdiction][header] = cell.value if cell.value else 'No data available.'
     return data, list(data.keys()), headers, default_message, warning_message
