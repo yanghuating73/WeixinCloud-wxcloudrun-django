@@ -33,8 +33,9 @@ def load_table(path):
     warning_message = sheet2.cell(row=2, column=1).value or "No warning message set."
 
     data = {}
-    headers = [cell.value for cell in sheet1[2]][1:]  # First row, skip first cell
+    headers = [cell.value for cell in sheet1[0]]  # First row, skip first cell
     count = len(headers)  # count of info-types, including 3 jurisdiction columns
+    logger.info(str(count))
 
     # for row in sheet1.iter_rows(min_row=2):
     #    jurisdiction = row[0].value
@@ -49,23 +50,25 @@ def load_table(path):
             continue
         data[jurisdiction] = {}
         for i in range(4, count):  # Columns E (4) to end
-            header = headers[i - 4]  # headers aligned with E to end
+            header = headers[i]  # headers aligned with E to end
             cell = row[i]
             data[jurisdiction][header] = cell.value if cell.value else 'No data available.'
+    for row in sheet1.iter_rows(min_row=2):
         jurisdiction = row[2].value  # Column C
         if not jurisdiction:
             continue
         data[jurisdiction] = {}
         for i in range(4, count):  # Columns E (4) to end
-            header = headers[i - 4]  # headers aligned with E to end
+            header = headers[i]  # headers aligned with E to end
             cell = row[i]
             data[jurisdiction][header] = cell.value if cell.value else 'No data available.'
+    for row in sheet1.iter_rows(min_row=2):
         jurisdiction = row[3].value  # Column D
         if not jurisdiction:
             continue
         data[jurisdiction] = {}
         for i in range(4, count):  # Columns E (4) to end
-            header = headers[i - 4]  # headers aligned with E to end
+            header = headers[i]  # headers aligned with E to end
             cell = row[i]
             data[jurisdiction][header] = cell.value if cell.value else 'No data available.'
     return data, list(data.keys()), headers, default_message, warning_message
