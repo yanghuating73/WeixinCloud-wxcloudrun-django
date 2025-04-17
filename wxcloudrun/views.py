@@ -54,8 +54,9 @@ def load_table(path):
     return data, list(data.keys()), headers, default_message, warning_message
 
 def fuzzy_match(text, options):
+    text = str(text).lower()
     for option in options:
-        if option and option.lower() in text.lower():
+        if option and str(option).lower() in text.lower():
             return option
     return None
 
@@ -64,7 +65,7 @@ def test(request):
     # load the file to local path
     file_url = (
         "https://7072-prod-1g3d62ey10e2634f-1353111496.tcb.qcloud.la/rules.xlsx"
-        "?sign=57ca773158ef85b464426c2754bd5c91&t=1744600981"
+        "?sign=4fabc22871e948dbff37604a24e2f2f7&t=1744858377"
     )
     local_path = download_excel_file(file_url)
 
@@ -102,7 +103,7 @@ def test(request):
                 reply = default_message
             else:
                 result = table[matched_jurisdiction][matched_info]
-                reply = warning_message + "\n" + matched_jurisdiction_matched_info + ":\n" + result
+                reply = warning_message + "\n" + matched_jurisdiction + "-" + matched_info + ":\n" + result
 
     # 5. 构建回复格式
     rsp = JsonResponse({
