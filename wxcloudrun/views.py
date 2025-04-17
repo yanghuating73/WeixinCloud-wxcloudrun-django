@@ -33,7 +33,7 @@ def load_table(path):
     warning_message = sheet2.cell(row=2, column=1).value or "No warning message set."
 
     data = {}
-    headers = [cell.value for cell in sheet1[0]]  # First row, skip first cell
+    headers = [cell.value for cell in sheet1[1]]  # First row, skip first cell
     count = len(headers)  # count of info-types, including 3 jurisdiction columns
     logger.info(str(count))
 
