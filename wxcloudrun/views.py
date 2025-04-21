@@ -121,7 +121,7 @@ def test(request):
             matched_info = fuzzy_match(user_msg, info_types)
             if not matched_info:
                 result = table[matched_jurisdiction]["制度"]  # default: 制度
-                reply = warning_message + "\n" + matched_jurisdiction + "-" + matched_info + ":\n" + result
+                reply = warning_message + "\n" + matched_jurisdiction + "-" + "专利制度" + ":\n" + result
             else:
                 result = table[matched_jurisdiction][matched_info]
                 reply = warning_message + "\n" + matched_jurisdiction + "-" + matched_info + ":\n" + result
