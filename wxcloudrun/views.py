@@ -85,7 +85,7 @@ def test(request):
     # load the file to local path
     file_url = (
         "https://7072-prod-1g3d62ey10e2634f-1353111496.tcb.qcloud.la/rules.xlsx"
-        "?sign=4fabc22871e948dbff37604a24e2f2f7&t=1744858377"
+        "?sign=518db5b6d22606938d885d2783399126&t=1745226980"
     )
     local_path = download_excel_file(file_url)
 
@@ -120,7 +120,8 @@ def test(request):
         else:
             matched_info = fuzzy_match(user_msg, info_types)
             if not matched_info:
-                reply = default_message
+                result = table[matched_jurisdiction]["制度"]  # default: 制度
+                reply = warning_message + "\n" + matched_jurisdiction + "-" + matched_info + ":\n" + result
             else:
                 result = table[matched_jurisdiction][matched_info]
                 reply = warning_message + "\n" + matched_jurisdiction + "-" + matched_info + ":\n" + result
