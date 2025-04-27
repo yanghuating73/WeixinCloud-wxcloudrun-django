@@ -126,7 +126,7 @@ def test(request):
                 result = table[matched_jurisdiction][matched_info]
                 reply = warning_message + "\n" + matched_jurisdiction + "-" + matched_info + ":\n" + result
 
-    # 5. 构建回复格式
+    # 5. 构建回复的格式
     rsp = JsonResponse({
             "ToUserName": from_user,
             "FromUserName": to_user,
