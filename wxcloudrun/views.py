@@ -120,8 +120,12 @@ def test(request):
         else:
             matched_info = fuzzy_match(user_msg, info_types)
             if not matched_info:
-                result = table[matched_jurisdiction]["制度"]  # default: 制度
-                reply = warning_message + "\n" + matched_jurisdiction + "-" + "专利制度" + ":\n" + result
+                if "价" in user_msg or "钱" in user_msg:
+                    result = table[matched_jurisdiction]["费用"]  # default: 制度
+                    reply = warning_message + "\n" + matched_jurisdiction + "-" + "专利费用" + ":\n" + result
+                else:
+                    result = table[matched_jurisdiction]["制度"]  # default: 制度
+                    reply = warning_message + "\n" + matched_jurisdiction + "-" + "专利制度" + ":\n" + result
             else:
                 result = table[matched_jurisdiction][matched_info]
                 reply = warning_message + "\n" + matched_jurisdiction + "-" + matched_info + ":\n" + result
